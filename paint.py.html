@@ -1,0 +1,136 @@
+<html>
+<head>
+<title>main.py</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #cc7832;}
+.s1 { color: #a9b7c6;}
+.s2 { color: #6a8759;}
+.s3 { color: #6897bb;}
+.s4 { color: #808080;}
+</style>
+</head>
+<body bgcolor="#2b2b2b">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+main.py</font>
+</center></td></tr></table>
+<pre><span class="s0">from </span><span class="s1">tkinter </span><span class="s0">import </span><span class="s1">*</span>
+<span class="s0">from </span><span class="s1">tkinter.ttk </span><span class="s0">import </span><span class="s1">Scale</span>
+<span class="s0">from </span><span class="s1">tkinter </span><span class="s0">import </span><span class="s1">colorchooser</span><span class="s0">, </span><span class="s1">filedialog</span><span class="s0">, </span><span class="s1">messagebox</span>
+<span class="s0">from </span><span class="s1">tkinter.filedialog </span><span class="s0">import </span><span class="s1">asksaveasfilename</span>
+<span class="s0">import </span><span class="s1">PIL.ImageGrab </span><span class="s0">as </span><span class="s1">ImageGrab</span>
+
+<span class="s0">class </span><span class="s1">Paint():</span>
+
+    <span class="s0">def </span><span class="s1">__init__(self</span><span class="s0">, </span><span class="s1">root):</span>
+        <span class="s1">self.root = root</span>
+        <span class="s1">self.root.title(</span><span class="s2">&quot;Paint&quot;</span><span class="s1">)</span>
+        <span class="s1">self.root.geometry(</span><span class="s2">&quot;1000x720&quot;</span><span class="s1">)</span>
+        <span class="s1">self.root.configure(background=</span><span class="s2">'White'</span><span class="s1">)</span>
+        <span class="s1">self.root.resizable(</span><span class="s3">0</span><span class="s0">, </span><span class="s3">0</span><span class="s1">)</span>
+
+        <span class="s4">#var</span>
+        <span class="s1">self.pen_color = </span><span class="s2">&quot;black&quot;</span>
+        <span class="s1">self.eraser_color = </span><span class="s2">&quot;white&quot;</span>
+
+
+        <span class="s4">#COLOR PALETTE</span>
+        <span class="s1">self.color_frame = LabelFrame(self.root</span><span class="s0">, </span><span class="s1">text=</span><span class="s2">'Color Palette'</span><span class="s0">, </span><span class="s1">font=(</span><span class="s2">'helvetica'</span><span class="s0">, </span><span class="s3">15</span><span class="s1">)</span><span class="s0">, </span><span class="s1">bd=</span><span class="s3">2</span><span class="s0">, </span><span class="s1">relief=RIDGE</span><span class="s0">, </span><span class="s1">bg=</span><span class="s2">&quot;white&quot;</span><span class="s1">)</span>
+        <span class="s1">self.color_frame.place(x=</span><span class="s3">10</span><span class="s0">, </span><span class="s1">y=</span><span class="s3">0</span><span class="s0">, </span><span class="s1">width=</span><span class="s3">300</span><span class="s0">, </span><span class="s1">height=</span><span class="s3">90</span><span class="s1">)</span>
+
+        <span class="s1">colors = [</span><span class="s2">'#ff0000'</span><span class="s0">, </span><span class="s2">'#ff4dd2'</span><span class="s0">, </span><span class="s2">'#ffff33'</span><span class="s0">, </span><span class="s2">'#000000'</span><span class="s0">, </span><span class="s2">'#0066ff'</span><span class="s0">, </span><span class="s2">'#660033'</span><span class="s0">, </span><span class="s2">'#4dff4d'</span><span class="s0">, </span><span class="s2">'#b300b3'</span><span class="s0">, </span><span class="s2">'#00ffff'</span><span class="s0">, </span><span class="s2">'#808080'</span><span class="s0">, </span><span class="s2">'#99ffcc'</span><span class="s0">, </span><span class="s2">'#336600'</span><span class="s0">, </span><span class="s2">'#ff9966'</span><span class="s0">, </span><span class="s2">'#ff99ff'</span><span class="s0">, </span><span class="s2">'#00cc99'</span><span class="s1">]</span>
+        <span class="s1">i = j = </span><span class="s3">0</span>
+        <span class="s0">for </span><span class="s1">color </span><span class="s0">in </span><span class="s1">colors:</span>
+            <span class="s1">Button(self.color_frame</span><span class="s0">, </span><span class="s1">bg=color</span><span class="s0">, </span><span class="s1">bd=</span><span class="s3">2</span><span class="s0">, </span><span class="s1">relief=RIDGE</span><span class="s0">, </span><span class="s1">width=</span><span class="s3">3</span><span class="s0">, </span><span class="s1">command=</span><span class="s0">lambda </span><span class="s1">col=color:self.select_color(col)).grid(row=j</span><span class="s0">, </span><span class="s1">column=i)</span>
+            <span class="s1">i += </span><span class="s3">1</span>
+            <span class="s0">if </span><span class="s1">i == </span><span class="s3">6</span><span class="s1">:</span>
+                <span class="s1">i = </span><span class="s3">0</span>
+                <span class="s1">j = </span><span class="s3">1</span>
+
+
+        <span class="s4">#BUTTONS</span>
+        <span class="s1">self.pen_color_button = Button(self.root</span><span class="s0">, </span><span class="s1">text=</span><span class="s2">&quot;More Colors&quot;</span><span class="s0">, </span><span class="s1">bd=</span><span class="s3">2</span><span class="s0">, </span><span class="s1">font=(</span><span class="s2">'helvetica'</span><span class="s0">, </span><span class="s3">10</span><span class="s0">, </span><span class="s2">'bold'</span><span class="s1">)</span><span class="s0">,  </span><span class="s1">bg=</span><span class="s2">'white'</span><span class="s0">, </span><span class="s1">command=self.custom_pen_colors</span><span class="s0">, </span><span class="s1">width=</span><span class="s3">10</span><span class="s0">, </span><span class="s1">height=</span><span class="s3">2</span><span class="s0">, </span><span class="s1">relief=RIDGE)</span>
+        <span class="s1">self.pen_color_button.place(x=</span><span class="s3">210</span><span class="s0">, </span><span class="s1">y=</span><span class="s3">30</span><span class="s1">)</span>
+
+        <span class="s1">self.eraser_button = Button(self.root</span><span class="s0">, </span><span class="s1">text=</span><span class="s2">&quot;Erase&quot;</span><span class="s0">, </span><span class="s1">font=(</span><span class="s2">'helvetica'</span><span class="s0">, </span><span class="s3">10</span><span class="s0">, </span><span class="s2">'bold'</span><span class="s1">)</span><span class="s0">,  </span><span class="s1">bd=</span><span class="s3">2</span><span class="s0">, </span><span class="s1">bg=</span><span class="s2">'white'</span><span class="s0">, </span><span class="s1">command=self.eraser</span><span class="s0">, </span><span class="s1">width=</span><span class="s3">8</span><span class="s0">, </span><span class="s1">height=</span><span class="s3">2</span><span class="s0">, </span><span class="s1">relief=RIDGE)</span>
+        <span class="s1">self.eraser_button.place(x=</span><span class="s3">330</span><span class="s0">, </span><span class="s1">y=</span><span class="s3">30</span><span class="s1">)</span>
+
+        <span class="s1">self.clear_button = Button(self.root</span><span class="s0">, </span><span class="s1">text=</span><span class="s2">&quot;Clear&quot;</span><span class="s0">, </span><span class="s1">font=(</span><span class="s2">'helvetica'</span><span class="s0">, </span><span class="s3">10</span><span class="s0">, </span><span class="s2">'bold'</span><span class="s1">)</span><span class="s0">,  </span><span class="s1">bd=</span><span class="s3">2</span><span class="s0">, </span><span class="s1">bg=</span><span class="s2">'white'</span><span class="s0">, </span><span class="s1">command=</span><span class="s0">lambda </span><span class="s1">: self.canvas.delete(</span><span class="s2">&quot;all&quot;</span><span class="s1">)</span><span class="s0">, </span><span class="s1">width=</span><span class="s3">8</span><span class="s0">, </span><span class="s1">height=</span><span class="s3">2</span><span class="s0">, </span><span class="s1">relief=RIDGE)</span>
+        <span class="s1">self.clear_button.place(x=</span><span class="s3">430</span><span class="s0">, </span><span class="s1">y=</span><span class="s3">30</span><span class="s1">)</span>
+
+        <span class="s1">self.save_button = Button(self.root</span><span class="s0">, </span><span class="s1">text=</span><span class="s2">&quot;Save&quot;</span><span class="s0">, </span><span class="s1">font=(</span><span class="s2">'helvetica'</span><span class="s0">, </span><span class="s3">10</span><span class="s0">, </span><span class="s2">'bold'</span><span class="s1">)</span><span class="s0">, </span><span class="s1">bd=</span><span class="s3">2</span><span class="s0">, </span><span class="s1">bg=</span><span class="s2">'white'</span><span class="s0">, </span><span class="s1">command=self.save_paint</span><span class="s0">, </span><span class="s1">width=</span><span class="s3">8</span><span class="s0">, </span><span class="s1">height=</span><span class="s3">2</span><span class="s0">, </span><span class="s1">relief=RIDGE)</span>
+        <span class="s1">self.save_button.place(x=</span><span class="s3">530</span><span class="s0">, </span><span class="s1">y=</span><span class="s3">30</span><span class="s1">)</span>
+
+        <span class="s1">self.canvas_color_button = Button(self.root</span><span class="s0">, </span><span class="s1">text=</span><span class="s2">&quot;Canvas&quot;</span><span class="s0">, </span><span class="s1">font=(</span><span class="s2">'helvetica'</span><span class="s0">, </span><span class="s3">10</span><span class="s0">, </span><span class="s2">'bold'</span><span class="s1">)</span><span class="s0">, </span><span class="s1">bd=</span><span class="s3">2</span><span class="s0">, </span><span class="s1">bg=</span><span class="s2">'white'</span><span class="s0">, </span><span class="s1">command=self.canvas_color</span><span class="s0">, </span><span class="s1">width=</span><span class="s3">8</span><span class="s0">, </span><span class="s1">height=</span><span class="s3">2</span><span class="s0">, </span><span class="s1">relief=RIDGE)</span>
+        <span class="s1">self.canvas_color_button.place(x=</span><span class="s3">630</span><span class="s0">, </span><span class="s1">y=</span><span class="s3">30</span><span class="s1">)</span>
+
+
+
+        <span class="s4">#FRAMES</span>
+
+
+
+        <span class="s1">self.pen_size_scale_frame = LabelFrame(self.root</span><span class="s0">, </span><span class="s1">text=</span><span class="s2">&quot;Pen Size&quot;</span><span class="s0">, </span><span class="s1">bd=</span><span class="s3">2</span><span class="s0">, </span><span class="s1">bg=</span><span class="s2">'white'</span><span class="s0">, </span><span class="s1">font=(</span><span class="s2">'helvetica'</span><span class="s0">, </span><span class="s3">10</span><span class="s1">)</span><span class="s0">, </span><span class="s1">relief=RIDGE)</span>
+        <span class="s1">self.pen_size_scale_frame.place(x=</span><span class="s3">850</span><span class="s0">, </span><span class="s1">y=</span><span class="s3">90</span><span class="s0">, </span><span class="s1">height=</span><span class="s3">160</span><span class="s0">, </span><span class="s1">width=</span><span class="s3">70</span><span class="s1">)</span>
+        <span class="s1">self.pen_size = Scale(self.pen_size_scale_frame</span><span class="s0">, </span><span class="s1">orient=VERTICAL</span><span class="s0">, </span><span class="s1">from_=</span><span class="s3">50</span><span class="s0">, </span><span class="s1">to=</span><span class="s3">0</span><span class="s0">, </span><span class="s1">length=</span><span class="s3">150</span><span class="s1">)</span>
+        <span class="s1">self.pen_size.set(</span><span class="s3">1</span><span class="s1">)</span>
+        <span class="s1">self.pen_size.grid(row=</span><span class="s3">1</span><span class="s0">, </span><span class="s1">column=</span><span class="s3">0</span><span class="s0">, </span><span class="s1">padx=</span><span class="s3">20</span><span class="s1">)</span>
+
+       
+        <span class="s4">#create the actual canvas</span>
+        <span class="s1">self.canvas = Canvas(self.root</span><span class="s0">, </span><span class="s1">bg=</span><span class="s2">'white'</span><span class="s0">, </span><span class="s1">bd=</span><span class="s3">5</span><span class="s0">, </span><span class="s1">relief=GROOVE</span><span class="s0">, </span><span class="s1">height=</span><span class="s3">700</span><span class="s0">, </span><span class="s1">width=</span><span class="s3">800</span><span class="s1">)</span>
+        <span class="s1">self.canvas.place(x=</span><span class="s3">0</span><span class="s0">, </span><span class="s1">y=</span><span class="s3">100</span><span class="s1">)</span>
+
+        <span class="s1">self.canvas.bind(</span><span class="s2">&quot;&lt;B1-Motion&gt;&quot;</span><span class="s0">, </span><span class="s1">self.paint)</span>
+
+        <span class="s4">#Functions</span>
+
+    <span class="s0">def </span><span class="s1">paint(self</span><span class="s0">, </span><span class="s1">event):</span>
+        <span class="s1">x1</span><span class="s0">,</span><span class="s1">y1 = (event.x-</span><span class="s3">1</span><span class="s1">)</span><span class="s0">, </span><span class="s1">(event.y-</span><span class="s3">1</span><span class="s1">)</span>
+        <span class="s1">x2</span><span class="s0">,</span><span class="s1">y2 = (event.x+</span><span class="s3">1</span><span class="s1">)</span><span class="s0">, </span><span class="s1">(event.y+</span><span class="s3">1</span><span class="s1">)</span>
+
+        <span class="s1">self.canvas.create_oval(x1</span><span class="s0">, </span><span class="s1">y1</span><span class="s0">, </span><span class="s1">x2</span><span class="s0">, </span><span class="s1">y2</span><span class="s0">, </span><span class="s1">fill=self.pen_color</span><span class="s0">, </span><span class="s1">outline=self.pen_color</span><span class="s0">, </span><span class="s1">width=self.pen_size.get())</span>
+
+    <span class="s0">def </span><span class="s1">select_color(self</span><span class="s0">,</span><span class="s1">col):</span>
+        <span class="s1">self.pen_color = col</span>
+
+    <span class="s0">def </span><span class="s1">eraser(self):</span>
+        <span class="s1">self.pen_color = self.eraser_color</span>
+
+    <span class="s0">def </span><span class="s1">canvas_color(self):</span>
+        <span class="s1">color = colorchooser.askcolor()</span>
+        <span class="s1">self.canvas.configure(background=color[</span><span class="s3">1</span><span class="s1">])</span>
+        <span class="s1">self.eraser_color = color[</span><span class="s3">1</span><span class="s1">]</span>
+
+    <span class="s0">def </span><span class="s1">custom_pen_colors(self):</span>
+        <span class="s1">color = colorchooser.askcolor()</span>
+        <span class="s1">self.pen_color = color[</span><span class="s3">1</span><span class="s1">]</span>
+
+    <span class="s0">def </span><span class="s1">save_paint(self):</span>
+        <span class="s0">try</span><span class="s1">:</span>
+            <span class="s1">filename = asksaveasfilename(defaultextension=</span><span class="s2">'.jpg'</span><span class="s1">)</span>
+            <span class="s1">x = self.root.winfo_rootx() + self.canvas.winfo_x()</span>
+            <span class="s1">y = self.root.winfo_rooty() + self.canvas.winfo_y()</span>
+            <span class="s1">x1 = x + self.canvas.winfo_width()</span>
+            <span class="s1">y1 = y + self.canvas.winfo_height()</span>
+            <span class="s1">ImageGrab.grab().crop((x</span><span class="s0">, </span><span class="s1">y</span><span class="s0">, </span><span class="s1">x1</span><span class="s0">, </span><span class="s1">y1)).save(filename)</span>
+            <span class="s1">messagebox.showinfo(</span><span class="s2">'Paint says,' 'image is saved as' </span><span class="s1">+ str(filename))</span>
+
+        <span class="s0">except</span><span class="s1">:</span>
+            <span class="s1">messagebox.showerror(</span><span class="s2">&quot;paints says&quot;</span><span class="s0">, </span><span class="s2">&quot;epic fail! nagkamali po kayo boss&quot;</span><span class="s1">)</span>
+
+
+
+
+<span class="s0">if </span><span class="s1">__name__ == </span><span class="s2">&quot;__main__&quot;</span><span class="s1">:</span>
+    <span class="s1">root = Tk()</span>
+    <span class="s1">p = Paint(root)</span>
+    <span class="s1">root.mainloop()</span>
+
+
+
+</pre>
+</body>
+</html>
